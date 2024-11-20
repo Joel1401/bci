@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    image: 'docker-spring-boot-bci:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/recipe
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+    ports:
+      - "8080"
+    networks: [ 'mynetwork' ]
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=recipe
+    ports:
+      - "5432"
+    networks: [ 'mynetwork' ]
+networks:
+  mynetwork:
+    name: mynetwork
